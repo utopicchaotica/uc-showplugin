@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en-ca">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Add New Show</title>
+
+		<!-- Bootstrap CSS -->
+		<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"> -->
+		<link rel="stylesheet" href="css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/tempusdominus-bootstrap-4.min.css">
+		<link rel="stylesheet" href="css/select2.min.css">
+
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+<style type="text/css">
+#showName, #showCompany, #showType { width: 100%; }
+#showSchedule input { padding-left: 2px; }
+.form-action-btns { text-align: center; }
+.showType { text-transform: capitalize; }
+</style>
+	</head>
+	<body>
+		<div class="container">
+			<h1>Show</h1>
+			<h3>Schedule</h3>
+			<!-- <div class="row"> -->
+				<!-- <div class="col-10"> -->
+					<form id="showSchedule">
+						<div id="showinfo" class="form-row">
+							<div class="form-group col-sm-4">
+								<!-- <label for="showName">Name: &nbsp;</label> -->
+								<input type="text" id="showName" placeholder="Name of the show">
+							</div>
+							<div class="form-group col-sm-4">
+								<!-- <label for="showCompany">Production Company: &nbsp;</label> -->
+								<input type="text" id="showCompany" placeholder="Name of your company or collective">
+							</div>
+							<div class="form-group col-sm-4">
+								<!-- <label for="showType">Type of Show: &nbsp;</label> -->
+								<select id="showType"><option></option></select>
+
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="form-group col-sm-4">
+								input
+							</div>
+							<div class="form-group col-sm-4"></div>
+							<div class="form-group col-sm-4"></div>
+						</div>
+						<div class="form-row">
+							<div class="form-group col-sm-4">
+								<!-- <label for="#hasPreview">Check if show has a preview: &nbsp;</label>
+								<input type="checkbox" id="hasPreview"> -->
+								<label for="#isSingleDayShow">Single day show: &nbsp;</label>
+								<input type="checkbox" id="isSingleDayShow">
+							</div>
+							<div class="form-group col-sm-4">
+								<!-- <input type="text" id="showDates" class="form-control" placeholder="Date of run (including Preview)"> -->
+								<div class="input-group date" id="showStartDate" data-target-input="nearest">
+									<input type="text" class="form-control datetimepicker-input" data-target="#showStartDate"/>
+									<div class="input-group-append" data-target="#showStartDate" data-toggle="datetimepicker">
+										<div class="input-group-text"><i class="fa fa-calendar"></i></div>
+									</div>
+								</div>
+							</div>
+							<div class="form-group col-sm-4">
+								<div class="input-group date" id="showEndDate" data-target-input="nearest">
+									<input type="text" class="form-control datetimepicker-input" data-target="#showEndDate"/>
+									<div class="input-group-append" data-target="#showEndDate" data-toggle="datetimepicker">
+										<div class="input-group-text"><i class="fa fa-calendar"></i></div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="form-row form-action-btns">
+							<div class="form-group col">
+								<button id="showApplyBtn" type="button" class="btn btn-success">Apply</button>
+								<button id="showClearBtn" type="button" class="btn btn-danger">Clear</button>
+							</div>
+						</div>
+						<div class="form-row">
+							<div class="form-group col">
+								<table id="showTable" class="table">
+									<thead>
+										<tr>
+											<th scope="col">#</th>
+											<th scope="col">Date</th>
+											<th scope="col">Type</th>
+											<th scope="col">Start Time</th>
+											<th scope="col">Tickets</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</form>
+				<!-- </div> -->
+			<!-- </div> -->
+			<!-- <div class="row">
+				<h4>Advanced Configurations</h4>
+				<form id="advConfig">
+					<div class="form-row">
+						<div class="form-group">Days to Exclude:
+							<div class="form-check form-check-inline">
+								<input type="checkbox" id="excludeDay0" class="form-check-input" value="0">
+								<label for="excludeDay0" class="form-check-label">Sunday</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input type="checkbox" id="excludeDay1" class="form-check-input" value="1" checked>
+								<label for="excludeDay0" class="form-check-label">Monday</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input type="checkbox" id="excludeDay2" class="form-check-input" value="2">
+								<label for="excludeDay0" class="form-check-label">Tuesday</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input type="checkbox" id="excludeDay3" class="form-check-input" value="3">
+								<label for="excludeDay0" class="form-check-label">Wednesday</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input type="checkbox" id="excludeDay4" class="form-check-input" value="4">
+								<label for="excludeDay0" class="form-check-label">Thursday</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input type="checkbox" id="excludeDay5" class="form-check-input" value="5">
+								<label for="excludeDay0" class="form-check-label">Friday</label>
+							</div>
+							<div class="form-check form-check-inline">
+								<input type="checkbox" id="excludeDay6" class="form-check-input" value="6">
+								<label for="excludeDay0" class="form-check-label">Saturday</label>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div> -->
+		</div>		<!-- Bootstrap JavaScript -->
+		<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+		<script src="js/jquery-3.3.1.slim.min.js"></script>
+		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script> -->
+		<script src="js/popper.min.js"></script>
+		<script src="js/moment-2.23.0.js"></script>
+		<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script> -->
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/tempusdominus-bootstrap-4.min.js"></script>
+		<script src="js/select2.min.js"></script>
+		<!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+		<!-- <script src="Hello World"></script> -->
+<script>
+jQuery(document).ready(function($) {
+	var showDefaults = {
+		showStartTime: '1930',
+		showType: 'regular',
+		matineeStartTime: '1430',
+		excludeDays: '1' //1 = Monday
+	};
+
+	/*$('#showDates').datepicker({
+		// maxViewMode: 0,
+		clearBtn: true,
+		multidate: true,
+		todayHighlight: true
+	});*/
+
+	$('#showStartDate').datetimepicker({format: 'L'});
+	$('#showEndDate').datetimepicker({
+		useCurrent: false,
+		format: 'L'
+	});
+	$("#showStartDate").on("change.datetimepicker", function (e) {
+		$('#showEndDate').datetimepicker('minDate', e.date);
+	});
+	$("#showEndDate").on("change.datetimepicker", function (e) {
+		$('#showStartDate').datetimepicker('maxDate', e.date);
+	});
+
+	$('#showType').select2({
+		placeholder: 'Select show type',
+		allowClear: true,
+		data: [
+			{id: 'theatre', text: 'Theatre'},
+			{id: 'concert', text: 'Concert'},
+			{id: 'other', text: 'Other'}
+		]
+	});
+
+	$('#showDirector').select2({
+		placeholder: 'Select director',
+		allowClear: true,
+		data: [
+			{id: '0', text: 'N/A'},
+			{id: '1', text: 'Eleanor Crowder'},
+			{id: '2', text: 'Dave Dawson'},
+			{id: '3', text: 'John P. Kelly'},
+			{id: '4', text: 'Teri Loretto-Valentik'},
+			{id: '5', text: 'Bronwyn Steinberg'},
+			{id: '6', text: 'David Whiteley'}
+		]
+	});
+
+	function isSingleDayShow() { return $('#isSingleDayShow').prop('checked'); }
+	function getStartDate() { return $('#showStartDate input').val(); }
+	function getEndDate() { return $('#showEndDate input').val(); }
+
+	function hideEndDate() { $('#showEndDate').toggle(); }
+	$('#isSingleDayShow').click(function(e) { hideEndDate(); });
+
+	function validateTable(args) {
+		console.log('Validating table...');
+		var validTable = true;
+
+		if (getStartDate()=="") {
+			//show message
+			console.log('Start date is empty :(');
+			validTable = false;
+		}
+		// if ins't single day show then check end date
+		if (!isSingleDayShow()) {
+			if (getEndDate()=="") {
+				console.log('End date is empty :(');
+				validTable = false;
+			}
+		}
+
+		return validTable;
+	}
+
+	$('#showApplyBtn').click(function(e) {
+		console.log('Apply clicked!');
+		$showTableListings = $('#showTable tbody');
+
+		if (validateTable()) {
+			var ssd = getStartDate();
+			var mssd = moment(ssd,"MM-DD-YYYY");
+			if (!isSingleDayShow()) {
+				var sed = getEndDate();
+				var msed = moment(sed,"MM-DD-YYYY");
+				var totalShows = 1 + msed.diff(mssd,'days');
+				console.log('Total shows: '+totalShows);
+				//if table is empty
+				if (!$showTableListings.children().length) {
+					console.log('Empty table');
+					var str = '';
+					var d = ssd;
+					var md = mssd;
+					for (var i = 0; i < totalShows; i++) {
+						// console.log(i);
+						str += '<tr><<th scope="row">'+(i+1)+'</th><td class="showDate" data-attribute-date="';
+						str += d+'">';
+						str += md.format("MMMM D, YYYY")+'</td><td class="showType">';
+						str += showDefaults.showType+'</td><td class="showStartTime">';
+						str += moment(showDefaults.showStartTime,"HHmm").format("h:mm A")+'</td><td class="tix">';
+						str += '<button type="button" class="btn btn-link">Link</button>';
+						str += '</td></tr>';
+						md.add(1,'d');
+					}
+					// console.log(str);
+					$showTableListings.empty().html(str);
+				} else {
+					console.log('Table not empty');
+					$showTableListings.children().each(function(index, el) {
+						//if single day show, then end after first row
+					});
+				}
+			} else { //single day show
+				console.log('Parsing single day show table...');
+				var str = '<tr><<th scope="row">1</th><td class="showDate" data-attribute-date="';
+				str += ssd+'">';
+				str += mssd.format("MMMM D, YYYY")+'</td><td class="showType">';
+				str += showDefaults.showType+'</td><td class="showStartTime">';
+				str += moment(showDefaults.showStartTime,"HHmm").format("h:mm A")+'</td><td class="tix">';
+				str += '<button type="button" class="btn btn-link">Link</button>';
+				str += '</td></tr>';
+				$showTableListings.html(str);
+			}
+		}
+/*
+<tr>
+	<th scope="row"></th>
+	<td></td>
+	<td></td>
+	<td></td>
+</tr>
+*/
+	});
+});
+</script>
+	</body>
+</html>
