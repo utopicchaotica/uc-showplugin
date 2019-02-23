@@ -8,7 +8,8 @@
 
 		<!-- Bootstrap CSS -->
 		<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous"> -->
-		<link rel="stylesheet" href="css/font-awesome.min.css">
+		<!-- <link rel="stylesheet" href="css/font-awesome.min.css"> -->
+		<link rel="stylesheet" href="css/all.min.css">
 		<link rel="stylesheet" href="css/bootstrap.min.css">
 		<link rel="stylesheet" href="css/tempusdominus-bootstrap-4.min.css">
 		<link rel="stylesheet" href="css/select2.min.css">
@@ -22,8 +23,19 @@
 <style type="text/css">
 #showName, #showCompany, #showType { width: 100%; }
 #showSchedule input { padding-left: 2px; }
+#showDateEdit .controllers { padding-left: 3px; padding-top: 1%; }
+#showDateEdit .controllers .btn { margin-left: 3px; }
 .form-action-btns { text-align: center; }
 .showType { text-transform: capitalize; }
+.btn-circle {
+	width: 30px;
+	height: 30px;
+	text-align: center;
+	padding: 6px 0;
+	font-size: 14px;
+	line-height: 1.32;
+	border-radius: 15px !important;
+}
 </style>
 	</head>
 	<body>
@@ -149,6 +161,7 @@
 		<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script> -->
 		<script src="js/popper.min.js"></script>
 		<script src="js/moment-2.23.0.js"></script>
+		<script src="js/arrive-2.4.1.min.js"></script>
 		<!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script> -->
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/tempusdominus-bootstrap-4.min.js"></script>
@@ -162,6 +175,12 @@ jQuery(document).ready(function($) {
 		showType: 'regular',
 		matineeStartTime: '1430',
 		excludeDays: '1' //1 = Monday
+	};
+	var $defaults = {
+		showTypes: [
+		{id: 'preview', text:'Preview'},
+		{id: 'regular', text: 'Regular'},
+		{id: 'matinee', text: 'Matinee'}]
 	};
 
 	/*$('#showDates').datepicker({
@@ -207,9 +226,25 @@ jQuery(document).ready(function($) {
 		]
 	});
 
+	function createShowEditable(type,elemID,vars) {
+		var str = false;
+		// if (type == 'showDate') {
+		// 	$(elemID).datetimepicker({
+		// 		useCurrent: false,
+		// 		format: 'L'
+		// 	});
+		// }
+		if (type == 'showType') {
+			// $(elemID)
+		}
+
+		return str;
+	}
+
 	function isSingleDayShow() { return $('#isSingleDayShow').prop('checked'); }
 	function getStartDate() { return $('#showStartDate input').val(); }
 	function getEndDate() { return $('#showEndDate input').val(); }
+	function calcTotalDays(rangeStartDate, rangeEndDate)  { return rangeEndDate.diff(rangeEndDate,'days'); }
 
 	function hideEndDate() { $('#showEndDate').toggle(); }
 	$('#isSingleDayShow').click(function(e) { hideEndDate(); });
@@ -232,6 +267,104 @@ jQuery(document).ready(function($) {
 		}
 
 		return validTable;
+	}
+
+	$('#showTable').arrive('#showTypeEdit', function() {
+		var $newElem = $(this);
+		$newElem.select2({
+			placeholder: 'Select show type',
+			allowClear: true,
+			data: $defaults.showTypes
+		});
+	});
+	$('#showTable').leave('#showTypeEdit', function() {
+		var $removeElem = $(this);
+		$removeElem.select2('destroy');
+	});
+
+	$('#showTable').on('dblclick', 'td', function(e) {
+		e.stopPropagation();      //<-------stop the bubbling of the event here
+		var currentEle = $(this);
+		var value = $(this).html();
+		console.log('fire!');
+		// createShowEditable($(this).attr('class'),$(this).attr('id'));
+		updateShowTableVal (currentEle, value);
+	});
+
+	function updateShowTableVal(currentEle, value) {
+		// $(currentEle).html('<input class="thVal" type="text" value="' + value + '" >');
+		var curVal = moment($(currentEle).html(),"MMMM D, YYYY");
+		// console.log(curVal.format("MM-DD-YYYY"));
+		var str = '';
+
+		switch ($(currentEle).attr('class')) {
+			case 'showDate':
+				str = '<div class="input-group date" id="showDateEdit" data-target-input="nearest">';
+				str += '<input type="text" class="form-control datetimepicker-input" data-target="#showDateEdit" data-attribute-saved="'+curVal.format("MM-DD-YYYY")+'" value="'+curVal.format("MM/DD/YYYY")+'">';
+				str += '<div class="input-group-append" data-target="#showDateEdit" data-toggle="datetimepicker">';
+				str += '<div class="input-group-text"><i class="fa fa-calendar"></i></div>';
+				str += '<div class="controllers"><button type="button" class="btn btn-success btn-circle ctlr-apply" aria-label="Apply"><i class="fas fa-check"></i></button>';
+				str += '<button type="button" class="btn btn-danger btn-circle ctlr-cancel" aria-label="Cancel"><i class="fas fa-times"></i></button></div>';
+				str += '</div></div>';
+				$(currentEle).html(str);
+				$('#showDateEdit').datetimepicker({
+					useCurrent: false,
+					format: 'L',
+					data: value
+				});
+				break;
+			case 'showType':
+				str = '<select id="showTypeEdit"><option></option></select>';
+				$(currentEle).html(str);
+				/*$('showTypeEdit').select2({
+					placeholder: 'Select show type',
+					allowClear: true,
+					data: $defaults.showTypes
+				});*/
+				break;
+			default:
+				break;
+		}
+
+		var thVal = $(".thVal");
+		thVal.focus();
+		thVal.keyup(function (event) {
+			if (event.keyCode == 13) {
+				var v = $('#showDateEdit input').val();
+				// $(currentEle).html(thVal.val());
+				$(currentEle).html(v.trim());
+				// save(thVal.val());
+				return save(v);
+			}
+		});
+
+		// thVal.focusout(function () {
+		$('#showDateEdit .controllers .ctlr-apply').click(function () {
+			var v = $('#showDateEdit input').val();
+			// $(currentEle).html(thVal.val().trim());
+			if (!v) {
+				v = moment($('#showDateEdit input').attr('data-attribute-saved'),"MM-DD-YYYY");
+				v = v.format("MMMM D, YYYY");
+				$(currentEle).html(v);
+			} else {
+				v = moment(v,"MM/DD/YYYY");
+				$(currentEle).html(v.format("MMMM D, YYYY"));
+			}
+			// return save(thVal.val());
+			return save(v);
+		});
+
+		$('#showDateEdit .controllers .ctlr-cancel').click(function () {
+			var v = moment($('#showDateEdit input').attr('data-attribute-saved'),"MM-DD-YYYY");
+			v = v.format("MMMM D, YYYY");
+			$(currentEle).html(v);
+			return save(v);
+		});
+
+	}
+
+	function save(value) {
+		console.log(value);
 	}
 
 	$('#showApplyBtn').click(function(e) {
@@ -267,8 +400,19 @@ jQuery(document).ready(function($) {
 					$showTableListings.empty().html(str);
 				} else {
 					console.log('Table not empty');
+					var d = ssd;
+					var md = mssd;
 					$showTableListings.children().each(function(index, el) {
 						//if single day show, then end after first row
+						$showDate = $(el).find('.showDate');
+						console.log($showDate.html());
+						console.log('index: '+index);
+						if (index < totalShows) {
+							$showDate.html(md.format("MMMM D, YYYY"));
+							md.add(1,'d');
+						} else {
+							$(el).remove();
+						}
 					});
 				}
 			} else { //single day show
